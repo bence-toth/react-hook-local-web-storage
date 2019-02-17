@@ -7,7 +7,7 @@
     "hook",
     "localStorage"
   ],
-  "repository": "git@github.com:bence-toth/react-hook-local-storage.git",
+  "repository": "git@github.com:bence-toth/react-hook-local-web-storage.git",
   "license": "LGPL",
   "author": "Bence A. Toth <tothab@gmail.com>",
   "main": "dist/index.js",
