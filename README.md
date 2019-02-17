@@ -1,4 +1,4 @@
-# react-hook-local-storage :anchor:
+# react-hook-local-web-storage :anchor:
 
 A React hook to access `localStorage`.
 
@@ -7,13 +7,13 @@ A React hook to access `localStorage`.
 Using `npm`:
 
 ```sh
-npm install --save react-hook-local-storage
+npm install --save react-hook-local-web-storage
 ```
 
 Using `yarn`:
 
 ```sh
-yarn add react-hook-local-storage
+yarn add react-hook-local-web-storage
 ```
 
 ## Basic usage
@@ -28,7 +28,7 @@ The key to the `localStorage` entry you want to access must be supplied to the h
 
 ```jsx
 import React from 'react'
-import useLocalStorage from 'react-hook-local-storage'
+import useLocalStorage from 'react-hook-local-web-storage'
 
 const ComponentWithLocalStorage = () => {
   const [value, setValue] = useLocalStorage('myKey')

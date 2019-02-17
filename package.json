@@ -1,5 +1,5 @@
 {
-  "name": "react-hook-local-storage",
+  "name": "react-hook-local-web-storage",
   "version": "1.0.0",
   "description": "A React hook for accessing localStorage",
   "keywords": [
