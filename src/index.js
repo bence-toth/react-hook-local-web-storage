@@ -22,17 +22,17 @@ const useLocalStorage = (key, {updateFrequency}) => {
   }
 
   useEffect(() => {
-    let readLocalStorageInterval
+    let readLocalStorageIntervalId
     if (window.localStorage) {
       readFromLocalStorage()
-      readLocalStorageInterval = setInterval(
+      readLocalStorageIntervalId = setInterval(
         readFromLocalStorage,
         updateFrequency
-      ) 
+      )
     }
     return () => {
       if (window.localStorage) {
-        clearInterval(readLocalStorageInterval)
+        clearInterval(readLocalStorageIntervalId)
       }
     }
   }, [])
