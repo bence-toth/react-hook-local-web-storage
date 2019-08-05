@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A React hook for accessing localStorage",
   "keywords": [
     "react",
@@ -7,18 +7,13 @@
     "localStorage"
   ],
   "repository": "git@github.com:bence-toth/react-hook-local-web-storage.git",
-  "license": "LGPL",
+  "license": "LGPL-3.0",
   "author": "Bence A. Toth <tothab@gmail.com>",
   "contributors": [
     "Aleksander Nowak (https://github.com/vyrwu)"
   ],
-  "main": "dist/index.js",
   "dependencies": {
     "react": "^16.8.6"
-  },
-  "scripts": {
-    "build": "rm -rf dist && babel src --out-dir dist",
-    "build:watch": "babel src --out-dir dist --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,9 +29,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5"
   }
 }

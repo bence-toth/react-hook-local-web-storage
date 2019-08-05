@@ -65,4 +65,7 @@ const useLocalStorageNoSync = key => {
   return [read, write]
 }
 
-export default {useLocalStorage, useLocalStorageNoSync}
+export default {
+  useLocalStorage,
+  useLocalStorageNoSync
+}
