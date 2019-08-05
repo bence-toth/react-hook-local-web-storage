@@ -49,6 +49,7 @@ const useLocalStorageNoSync = key => {
     if (newValue !== oldValue) {
       setValue(newValue)
     }
+    return newValue
   }
 
   const write = newValue => {
