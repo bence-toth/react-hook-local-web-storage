@@ -51,7 +51,7 @@ const ComponentWithLocalStorage = () => {
 }
 ```
 
-**NOTE:** you can use `useLocalStorageNoSync` hook to opt out of using updates on hook state. First argument of the array will then contain a function returning value stored in `localStorage` on demand.
+**NOTE:** you can use `useLocalStorageNoSync` hook to opt out of using updates. First entry of the output array will then contain a function returning value stored in `localStorage` on demand.
 
 ## Tweaking update frequency
 
