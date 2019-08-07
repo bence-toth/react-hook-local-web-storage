@@ -18,7 +18,7 @@ yarn add react-hook-local-web-storage
 
 ## Basic usage
 
-The `useLocalStorage()` hook, similarly to the `useState()` hook, returns an array of two elements: 
+The `useLocalStorage()` hook, similarly to the `useState()` hook, returns an array of two elements:
 
 - the first element contains the value stored in `localStorage`, which is getting updated at regular intervals
 
@@ -50,6 +50,8 @@ const ComponentWithLocalStorage = () => {
   )
 }
 ```
+
+**NOTE:** you can use `useLocalStorageNoSync` hook to opt out of using updates on hook state. First argument of the array will then contain a function returning value stored in `localStorage` on demand.
 
 ## Tweaking update frequency
 

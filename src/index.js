@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react'
 const useLocalStorage = (key, {updateFrequency}) => {
   const [value, setValue] = useState()
 
-  const read = () => {
+  const readFromLocalStorage = () => {
     const oldValue = value
     const newValue = localStorage.getItem(key)
     if (newValue !== oldValue) {
@@ -11,7 +11,7 @@ const useLocalStorage = (key, {updateFrequency}) => {
     }
   }
 
-  const write = newValue => {
+  const writeToLocalStorage = newValue => {
     if (newValue !== undefined) {
       localStorage.setItem(key, newValue)
     }
@@ -24,9 +24,9 @@ const useLocalStorage = (key, {updateFrequency}) => {
   useEffect(() => {
     let readLocalStorageIntervalId
     if (window.localStorage) {
-      read()
+      readFromLocalStorage()
       readLocalStorageIntervalId = setInterval(
-        read,
+        readFromLocalStorage,
         updateFrequency
       )
     }
@@ -37,13 +37,13 @@ const useLocalStorage = (key, {updateFrequency}) => {
     }
   }, [])
 
-  return [value, write]
+  return [value, writeToLocalStorage]
 }
 
 const useLocalStorageNoSync = key => {
   const [value, setValue] = useState()
 
-  const read = () => {
+  const readFromLocalStorage = () => {
     const oldValue = value
     const newValue = localStorage.getItem(key)
     if (newValue !== oldValue) {
@@ -52,7 +52,7 @@ const useLocalStorageNoSync = key => {
     return newValue
   }
 
-  const write = newValue => {
+  const writeToLocalStorage = newValue => {
     if (newValue !== undefined) {
       localStorage.setItem(key, newValue)
     }
@@ -62,7 +62,7 @@ const useLocalStorageNoSync = key => {
     setValue(newValue)
   }
 
-  return [read, write]
+  return [readFromLocalStorage, writeToLocalStorage]
 }
 
 export default {
