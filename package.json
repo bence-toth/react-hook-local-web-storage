@@ -10,7 +10,7 @@
   "license": "LGPL-3.0",
   "author": "Bence A. Toth <tothab@gmail.com>",
   "contributors": [
-    "Aleksander Nowak (https://github.com/vyrwu)"
+    "Aleksander Nowak <alek_nowak@hotmail.com>"
   ],
   "dependencies": {
     "react": "^16.8.6"
