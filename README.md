@@ -82,10 +82,10 @@ The key to the `localStorage` entry you want to access must be supplied to the h
 
 ```jsx
 import React from 'react'
-import {useLocalStorageNoSync} from 'react-hook-local-web-storage'
+import {useLocalStorageNoSync as useLocalStorage} from 'react-hook-local-web-storage'
 
 const ComponentWithLocalStorage = () => {
-  const [getValue, setValue] = useLocalStorageNoSync('myKey')
+  const [getValue, setValue] = useLocalStorage('myKey')
 
   return (
     <div className="App">
