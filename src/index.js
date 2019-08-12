@@ -1,15 +1,7 @@
 import {useState, useEffect} from 'react'
 
-const useLocalStorage = (key, {updateFrequency}) => {
+const useLocalStorage = (key, {updateFrequency} = {}) => {
   const [value, setValue] = useState()
-
-  const readFromLocalStorage = () => {
-    const oldValue = value
-    const newValue = localStorage.getItem(key)
-    if (newValue !== oldValue) {
-      setValue(newValue)
-    }
-  }
 
   const writeToLocalStorage = newValue => {
     if (newValue !== undefined) {
@@ -22,6 +14,14 @@ const useLocalStorage = (key, {updateFrequency}) => {
   }
 
   useEffect(() => {
+    const readFromLocalStorage = () => {
+      const oldValue = value
+      const newValue = localStorage.getItem(key)
+      if (newValue !== oldValue) {
+        setValue(newValue)
+      }
+    }
+
     let readLocalStorageIntervalId
     if (window.localStorage) {
       readFromLocalStorage()
@@ -35,7 +35,7 @@ const useLocalStorage = (key, {updateFrequency}) => {
         clearInterval(readLocalStorageIntervalId)
       }
     }
-  }, [])
+  }, [key, value, updateFrequency])
 
   return [value, writeToLocalStorage]
 }
