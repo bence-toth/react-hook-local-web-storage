@@ -22,7 +22,7 @@ The `useLocalStorage()` hook, similarly to the `useState()` hook, returns an arr
 
 - the first element contains the value stored in `localStorage`, which is getting updated at regular intervals.
 
-- the second element is function which can be called with a value that will be stored in `localStorage`. If you call this function without an argument, the `localStorage` entry will be removed.
+- the second element is a function which can be called with a value that will be stored in `localStorage`. If you call this function without an argument, the `localStorage` entry will be removed.
 
 The key to the `localStorage` entry you want to access must be supplied to the hook as its first argument:
 
@@ -51,8 +51,6 @@ const ComponentWithLocalStorage = () => {
 }
 ```
 
-**NOTE:** you can use `useLocalStorageNoSync` hook to opt out of using updates. First entry of the output array will then .
-
 ### Tweaking the update frequency
 
 The default update frequency of the `localStorage` content is 1 second which can be overridden by calling `useLocalStorage()` with a second argument which is an options object, and has a member called `updateFrequency` that indicates the desired update frequency in milliseconds:
@@ -64,19 +62,21 @@ const [value, setValue] = useLocalStorage(
 )
 ```
 
-Read more about this in [Caveats](#caveats).
+Read more about syncing in [Caveats](#caveats).
 
 ### Caveats
 
 This hook is accessing `localStorage` content at regular intervals, which can result in a delay in registering changes and lead to performance issues if the update frequency is low.
 
+You can opt out from periodically reading from `localStorage` using the `useLocalStorageNoSync()` hook instead. Read more about this in [Disable syncing](#disable-syncing).
+
 ## Disable syncing
 
-The `useLocalStorageNoSync()` hook lets you use `localStorage` without continuous synchronization.
+In case you don't want the hook to automatically react to changes in `localStorage`, you can import and use the `useLocalStorageNoSync()` hook, which lets you use `localStorage` without continuous synchronization. The `useLocalStorageNoSync()` hook returns an array of two elements:
 
-- the first element is a getter function that returns value stored in `localStorage`. This triggers synchronization on demand.
+- the first element is a function that returns value stored in `localStorage`. This triggers synchronization on demand (when you call it, typically when the component renders).
 
-- the second element is function which can be called with a value that will be stored in `localStorage`. If you call this function without an argument, the `localStorage` entry will be removed.
+- the second element is a function which can be called with a value that will be stored in `localStorage`. If you call this function without an argument, the `localStorage` entry will be removed.
 
 The key to the `localStorage` entry you want to access must be supplied to the hook as its first argument:
 
