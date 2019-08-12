@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 
-const useLocalStorage = (key, {updateFrequency} = {}) => {
+const useLocalStorage = (key, {updateFrequency = 1000} = {}) => {
   const [value, setValue] = useState()
 
   const writeToLocalStorage = newValue => {
