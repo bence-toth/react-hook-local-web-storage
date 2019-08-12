@@ -1,30 +1,5 @@
 import {useState, useEffect} from 'react'
 
-export const useLocalStorageNoSync = key => {
-  const [value, setValue] = useState()
-
-  const readFromLocalStorage = () => {
-    const oldValue = value
-    const newValue = localStorage.getItem(key)
-    if (newValue !== oldValue) {
-      setValue(newValue)
-    }
-    return newValue
-  }
-
-  const writeToLocalStorage = newValue => {
-    if (newValue !== undefined) {
-      localStorage.setItem(key, newValue)
-    }
-    else {
-      localStorage.removeItem(key)
-    }
-    setValue(newValue)
-  }
-
-  return [readFromLocalStorage, writeToLocalStorage]
-}
-
 const useLocalStorage = (key, {updateFrequency}) => {
   const [value, setValue] = useState()
 
@@ -65,4 +40,31 @@ const useLocalStorage = (key, {updateFrequency}) => {
   return [value, writeToLocalStorage]
 }
 
+const useLocalStorageNoSync = key => {
+  const [value, setValue] = useState()
+
+  const readFromLocalStorage = () => {
+    const oldValue = value
+    const newValue = localStorage.getItem(key)
+    if (newValue !== oldValue) {
+      setValue(newValue)
+    }
+    return newValue
+  }
+
+  const writeToLocalStorage = newValue => {
+    if (newValue !== undefined) {
+      localStorage.setItem(key, newValue)
+    }
+    else {
+      localStorage.removeItem(key)
+    }
+    setValue(newValue)
+  }
+
+  return [readFromLocalStorage, writeToLocalStorage]
+}
+
 export default useLocalStorage
+
+export {useLocalStorageNoSync}
