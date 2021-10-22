@@ -107,6 +107,35 @@ const useLocalStorageNoSync = (key) => {
   return [readFromLocalStorage, writeToLocalStorage];
 };
 
+const useManyNoSync = (keys) => {
+  const [values, setValues] = useState(keys);
+
+  const writeObjectToLocalStorage = (newValues) => {
+    for (const [key, value] of Object.entries(newValues)) {
+      if (value !== undefined) {
+        localStorage.setItem(key, value);
+      } else {
+        localStorage.removeItem(key);
+      }
+    }
+    setValues(newValues);
+  };
+
+  const readFromLocalStorage = () => {
+    for (const [key, oldValue] of Object.entries(values)) {
+      const newValue = localStorage.getItem(key);
+      if (newValue !== oldValue) {
+        setValues((prev) => {
+          return { ...prev, key: newValue };
+        });
+      }
+    }
+    return values;
+  };
+
+  return [readFromLocalStorage, writeObjectToLocalStorage];
+};
+
 export default useLocalStorage;
 
-export { useLocalStorageNoSync, useManyInLocalStorage };
+export { useLocalStorageNoSync, useManyInLocalStorage, useManyNoSync };
