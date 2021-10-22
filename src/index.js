@@ -40,25 +40,28 @@ const useLocalStorage = (key, { updateFrequency = 1000 } = {}) => {
 };
 
 const useManyInLocalStorage = (keys, { updateFrequency = 1000 } = {}) => {
-  const [values, setValues] = useState();
+  const [values, setValues] = useState(keys);
 
   const writeToLocalStorage = (newValues) => {
-    for (const [key, value] of Object.entries(keys)) {
-      if (newValues[key] !== undefined) {
-        localStorage.setItem(key, newValues[key]);
+    for (const [key, value] of Object.entries(newValues)) {
+      if (value !== undefined) {
+        localStorage.setItem(key, value);
       } else {
         localStorage.removeItem(key);
       }
-      setValues(newValues);
     }
+    setValues(newValues);
   };
 
   useEffect(() => {
     const readFromLocalStorage = () => {
-      const oldValue = [...values];
-      const newValue = localStorage.getItem(key);
-      if (newValue !== oldValue) {
-        setValues(newValue);
+      for (const [key, oldValue] of Object.entries(values)) {
+        const newValue = localStorage.getItem(key);
+        if (newValue !== oldValue) {
+          setValues((prev) => {
+            return { ...prev, key: newValue };
+          });
+        }
       }
     };
 
