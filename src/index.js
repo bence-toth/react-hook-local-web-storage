@@ -1,70 +1,109 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from "react";
 
-const useLocalStorage = (key, {updateFrequency = 1000} = {}) => {
-  const [value, setValue] = useState()
+const useLocalStorage = (key, { updateFrequency = 1000 } = {}) => {
+  const [value, setValue] = useState();
 
-  const writeToLocalStorage = newValue => {
+  const writeToLocalStorage = (newValue) => {
     if (newValue !== undefined) {
-      localStorage.setItem(key, newValue)
+      localStorage.setItem(key, newValue);
+    } else {
+      localStorage.removeItem(key);
     }
-    else {
-      localStorage.removeItem(key)
-    }
-    setValue(newValue)
-  }
+    setValue(newValue);
+  };
 
   useEffect(() => {
     const readFromLocalStorage = () => {
-      const oldValue = value
-      const newValue = localStorage.getItem(key)
+      const oldValue = value;
+      const newValue = localStorage.getItem(key);
       if (newValue !== oldValue) {
-        setValue(newValue)
+        setValue(newValue);
       }
-    }
+    };
 
-    let readLocalStorageIntervalId
+    let readLocalStorageIntervalId;
     if (window.localStorage) {
-      readFromLocalStorage()
+      readFromLocalStorage();
       readLocalStorageIntervalId = setInterval(
         readFromLocalStorage,
         updateFrequency
-      )
+      );
     }
     return () => {
       if (window.localStorage) {
-        clearInterval(readLocalStorageIntervalId)
+        clearInterval(readLocalStorageIntervalId);
       }
+    };
+  }, [key, value, updateFrequency]);
+
+  return [value, writeToLocalStorage];
+};
+
+const useManyInLocalStorage = (keys, { updateFrequency = 1000 } = {}) => {
+  const [values, setValues] = useState();
+
+  const writeToLocalStorage = (newValues) => {
+    for (const [key, value] of Object.entries(keys)) {
+      if (newValues[key] !== undefined) {
+        localStorage.setItem(key, newValues[key]);
+      } else {
+        localStorage.removeItem(key);
+      }
+      setValues(newValues);
     }
-  }, [key, value, updateFrequency])
+  };
 
-  return [value, writeToLocalStorage]
-}
+  useEffect(() => {
+    const readFromLocalStorage = () => {
+      const oldValue = [...values];
+      const newValue = localStorage.getItem(key);
+      if (newValue !== oldValue) {
+        setValues(newValue);
+      }
+    };
 
-const useLocalStorageNoSync = key => {
-  const [value, setValue] = useState()
+    let readLocalStorageIntervalId;
+    if (window.localStorage) {
+      readFromLocalStorage();
+      readLocalStorageIntervalId = setInterval(
+        readFromLocalStorage,
+        updateFrequency
+      );
+    }
+    return () => {
+      if (window.localStorage) {
+        clearInterval(readLocalStorageIntervalId);
+      }
+    };
+  }, [key, value, updateFrequency]);
+
+  return [value, writeToLocalStorage];
+};
+
+const useLocalStorageNoSync = (key) => {
+  const [value, setValue] = useState();
 
   const readFromLocalStorage = () => {
-    const oldValue = value
-    const newValue = localStorage.getItem(key)
+    const oldValue = value;
+    const newValue = localStorage.getItem(key);
     if (newValue !== oldValue) {
-      setValue(newValue)
+      setValue(newValue);
     }
-    return newValue
-  }
+    return newValue;
+  };
 
-  const writeToLocalStorage = newValue => {
+  const writeToLocalStorage = (newValue) => {
     if (newValue !== undefined) {
-      localStorage.setItem(key, newValue)
+      localStorage.setItem(key, newValue);
+    } else {
+      localStorage.removeItem(key);
     }
-    else {
-      localStorage.removeItem(key)
-    }
-    setValue(newValue)
-  }
+    setValue(newValue);
+  };
 
-  return [readFromLocalStorage, writeToLocalStorage]
-}
+  return [readFromLocalStorage, writeToLocalStorage];
+};
 
-export default useLocalStorage
+export default useLocalStorage;
 
-export {useLocalStorageNoSync}
+export { useLocalStorageNoSync, useManyInLocalStorage };
