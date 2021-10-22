@@ -40,9 +40,14 @@ const useLocalStorage = (key, { updateFrequency = 1000 } = {}) => {
 };
 
 const useManyInLocalStorage = (keys, { updateFrequency = 1000 } = {}) => {
+  /*So that local storage keys are still easily accessed compared to vanilla React
+ without having to call useLocalStorage multiple times*/
+
   const [values, setValues] = useState(keys);
 
   const writeObjectToLocalStorage = (newValues) => {
+    //Example use: setStorage({name:"Luke", lastName:"Skywalker"});
+
     for (const [key, value] of Object.entries(newValues)) {
       if (value !== undefined) {
         localStorage.setItem(key, value);
@@ -110,17 +115,6 @@ const useLocalStorageNoSync = (key) => {
 const useManyNoSync = (keys) => {
   const [values, setValues] = useState(keys);
 
-  const writeObjectToLocalStorage = (newValues) => {
-    for (const [key, value] of Object.entries(newValues)) {
-      if (value !== undefined) {
-        localStorage.setItem(key, value);
-      } else {
-        localStorage.removeItem(key);
-      }
-    }
-    setValues(newValues);
-  };
-
   const readFromLocalStorage = () => {
     for (const [key, oldValue] of Object.entries(values)) {
       const newValue = localStorage.getItem(key);
@@ -131,6 +125,17 @@ const useManyNoSync = (keys) => {
       }
     }
     return values;
+  };
+
+  const writeObjectToLocalStorage = (newValues) => {
+    for (const [key, value] of Object.entries(newValues)) {
+      if (value !== undefined) {
+        localStorage.setItem(key, value);
+      } else {
+        localStorage.removeItem(key);
+      }
+    }
+    setValues(newValues);
   };
 
   return [readFromLocalStorage, writeObjectToLocalStorage];
