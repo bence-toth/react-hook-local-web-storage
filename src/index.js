@@ -42,7 +42,7 @@ const useLocalStorage = (key, { updateFrequency = 1000 } = {}) => {
 const useManyInLocalStorage = (keys, { updateFrequency = 1000 } = {}) => {
   const [values, setValues] = useState(keys);
 
-  const writeToLocalStorage = (newValues) => {
+  const writeObjectToLocalStorage = (newValues) => {
     for (const [key, value] of Object.entries(newValues)) {
       if (value !== undefined) {
         localStorage.setItem(key, value);
@@ -80,7 +80,7 @@ const useManyInLocalStorage = (keys, { updateFrequency = 1000 } = {}) => {
     };
   }, [key, value, updateFrequency]);
 
-  return [value, writeToLocalStorage];
+  return [value, writeObjectToLocalStorage];
 };
 
 const useLocalStorageNoSync = (key) => {
