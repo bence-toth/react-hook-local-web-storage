@@ -3,23 +3,40 @@ import { useState, useEffect, useCallback } from "react";
 const isString = (variable) =>
   typeof variable == "string" || variable instanceof String;
 
+const clearObjectValues = (object) =>
+  Object.fromEntries(Object.entries(object).map(([key]) => [key, null]));
+
+const safeObjectValues = (object) =>
+  Object.fromEntries(
+    Object.entries(object).map(([key, value]) => [
+      key,
+      [undefined, null].includes(value) ? null : `${value}`,
+    ])
+  );
+
 const useLocalStorage = (
   keys,
   { updateFrequency = 1000, noSync = false } = {}
 ) => {
   const isUsingMultipleKeys = !isString(keys);
-  const initialValue = isUsingMultipleKeys ? keys : undefined;
+  const initialValue = isUsingMultipleKeys ? clearObjectValues(keys) : null;
   const [value, setValue] = useState(initialValue);
 
   const readFromLocalStorage = useCallback(() => {
     if (isUsingMultipleKeys) {
-      for (const [key, oldValue] of Object.entries(value)) {
+      let newValues = {};
+      let hasSomethingChanged = false;
+      for (const [key] of Object.entries(value)) {
+        const oldValue = value[key];
         const newValue = localStorage.getItem(key);
         if (newValue !== oldValue) {
-          setValue((prev) => {
-            return { ...prev, [key]: newValue };
-          });
+          newValues = { ...newValues, [key]: localStorage.getItem(key) };
+          hasSomethingChanged = true;
         }
+      }
+      if (hasSomethingChanged) {
+        setValue({ ...value, ...newValues });
+        return { ...value, ...newValues };
       }
       return value;
     } else {
@@ -36,24 +53,31 @@ const useLocalStorage = (
     (newValue) => {
       if (isUsingMultipleKeys) {
         for (const [updatedKey, updatedValue] of Object.entries(newValue)) {
-          console.log(updatedKey, updatedValue);
-          if (updatedValue !== undefined) {
-            localStorage.setItem(updatedKey, updatedValue);
-          } else {
+          let safeUpdatedValue;
+          if ([undefined, null].includes(updatedValue)) {
+            safeUpdatedValue = null;
             localStorage.removeItem(updatedKey);
+          } else {
+            safeUpdatedValue = `${updatedValue}`;
+            localStorage.setItem(updatedKey, safeUpdatedValue);
           }
-          setValue({ ...value, [updatedKey]: updatedValue });
         }
+        setValue((previousValue) => {
+          return { ...previousValue, ...safeObjectValues(newValue) };
+        });
       } else {
-        if (newValue !== undefined) {
-          localStorage.setItem(keys, newValue);
-        } else {
+        let safeUpdatedValue;
+        if ([undefined, null].includes(newValue)) {
+          safeUpdatedValue = null;
           localStorage.removeItem(keys);
+        } else {
+          safeUpdatedValue = `${newValue}`;
+          localStorage.setItem(keys, safeUpdatedValue);
         }
-        setValue(newValue);
+        setValue(safeUpdatedValue);
       }
     },
-    [isUsingMultipleKeys, keys, value]
+    [isUsingMultipleKeys, keys]
   );
 
   useEffect(() => {
@@ -66,13 +90,18 @@ const useLocalStorage = (
     };
 
     const readMultipleKeysFromLocalStorage = () => {
-      for (const [key, oldValue] of Object.entries(value)) {
+      let newValues = {};
+      let hasSomethingChanged = false;
+      for (const [key] of Object.entries(value)) {
+        const oldValue = value[key];
         const newValue = localStorage.getItem(key);
         if (newValue !== oldValue) {
-          setValue((prev) => {
-            return { ...prev, [key]: newValue };
-          });
+          newValues = { ...newValues, [key]: localStorage.getItem(key) };
+          hasSomethingChanged = true;
         }
+      }
+      if (hasSomethingChanged) {
+        setValue({ ...value, ...newValues });
       }
     };
 
