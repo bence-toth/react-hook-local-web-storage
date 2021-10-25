@@ -35,7 +35,7 @@ const updateObjectFromLocalStorage = (object) => {
 
 const useLocalStorage = (
   keys,
-  { updateFrequency = 1000, noSync = false } = {}
+  { updateFrequency = 1000, sync = false } = {}
 ) => {
   const isUsingMultipleKeys = !isString(keys);
   const initialValue = isUsingMultipleKeys ? clearObjectValues(keys) : null;
@@ -113,7 +113,7 @@ const useLocalStorage = (
     let readLocalStorageIntervalId;
     if (window.localStorage) {
       readFromLocalStorage();
-      if (!noSync) {
+    if (sync) {
         readLocalStorageIntervalId = setInterval(
           readFromLocalStorage,
           updateFrequency
@@ -121,13 +121,13 @@ const useLocalStorage = (
       }
     }
     return () => {
-      if (window.localStorage && !noSync) {
+      if (sync) {
         clearInterval(readLocalStorageIntervalId);
       }
     };
-  }, [keys, value, updateFrequency, isUsingMultipleKeys, noSync]);
+  }, [keys, value, updateFrequency, isUsingMultipleKeys, sync]);
 
-  if (noSync) {
+  if (sync) {
     return [readFromLocalStorage, writeToLocalStorage];
   }
 
