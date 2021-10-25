@@ -19,9 +19,9 @@ const updateObjectFromLocalStorage = (object) => {
   let hasSomethingChanged = false;
   for (const [key] of Object.entries(object)) {
     const oldValue = object[key];
-    const newValue = localStorage.getItem(key);
+    const newValue = localStorage?.getItem?.(key);
     if (newValue !== oldValue) {
-      newValues = { ...newValues, [key]: localStorage.getItem(key) };
+      newValues = { ...newValues, [key]: localStorage?.getItem?.(key) };
       hasSomethingChanged = true;
     }
   }
@@ -51,7 +51,7 @@ const useLocalStorage = (
       return value;
     } else {
       const oldValue = value;
-      const newValue = localStorage.getItem(keys);
+      const newValue = localStorage?.getItem?.(keys);
       if (newValue !== oldValue) {
         setValue(newValue);
       }
@@ -66,10 +66,10 @@ const useLocalStorage = (
           let safeUpdatedValue;
           if ([undefined, null].includes(updatedValue)) {
             safeUpdatedValue = null;
-            localStorage.removeItem(updatedKey);
+            localStorage?.removeItem?.(updatedKey);
           } else {
             safeUpdatedValue = `${updatedValue}`;
-            localStorage.setItem(updatedKey, safeUpdatedValue);
+            localStorage?.setItem?.(updatedKey, safeUpdatedValue);
           }
         }
         setValue((previousValue) => {
@@ -79,10 +79,10 @@ const useLocalStorage = (
         let safeUpdatedValue;
         if ([undefined, null].includes(newValue)) {
           safeUpdatedValue = null;
-          localStorage.removeItem(keys);
+          localStorage?.removeItem?.(keys);
         } else {
           safeUpdatedValue = `${newValue}`;
-          localStorage.setItem(keys, safeUpdatedValue);
+          localStorage?.setItem?.(keys, safeUpdatedValue);
         }
         setValue(safeUpdatedValue);
       }
@@ -93,7 +93,7 @@ const useLocalStorage = (
   useEffect(() => {
     const readSingleKeyFromLocalStorage = () => {
       const oldValue = value;
-      const newValue = localStorage.getItem(keys);
+      const newValue = localStorage?.getItem?.(keys);
       if (newValue !== oldValue) {
         setValue(newValue);
       }
@@ -111,14 +111,12 @@ const useLocalStorage = (
       : readSingleKeyFromLocalStorage;
 
     let readLocalStorageIntervalId;
-    if (window.localStorage) {
-      readFromLocalStorage();
+    readFromLocalStorage();
     if (sync) {
-        readLocalStorageIntervalId = setInterval(
-          readFromLocalStorage,
-          updateFrequency
-        );
-      }
+      readLocalStorageIntervalId = setInterval(
+        readFromLocalStorage,
+        updateFrequency
+      );
     }
     return () => {
       if (sync) {
