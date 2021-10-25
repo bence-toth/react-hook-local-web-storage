@@ -14,6 +14,25 @@ const safeObjectValues = (object) =>
     ])
   );
 
+const updateObjectFromLocalStorage = (object) => {
+  let newValues = {};
+  let hasSomethingChanged = false;
+  for (const [key] of Object.entries(object)) {
+    const oldValue = object[key];
+    const newValue = localStorage.getItem(key);
+    if (newValue !== oldValue) {
+      newValues = { ...newValues, [key]: localStorage.getItem(key) };
+      hasSomethingChanged = true;
+    }
+  }
+
+  if (!hasSomethingChanged) {
+    return false;
+  }
+
+  return newValues;
+};
+
 const useLocalStorage = (
   keys,
   { updateFrequency = 1000, noSync = false } = {}
@@ -24,17 +43,8 @@ const useLocalStorage = (
 
   const readFromLocalStorage = useCallback(() => {
     if (isUsingMultipleKeys) {
-      let newValues = {};
-      let hasSomethingChanged = false;
-      for (const [key] of Object.entries(value)) {
-        const oldValue = value[key];
-        const newValue = localStorage.getItem(key);
-        if (newValue !== oldValue) {
-          newValues = { ...newValues, [key]: localStorage.getItem(key) };
-          hasSomethingChanged = true;
-        }
-      }
-      if (hasSomethingChanged) {
+      const newValues = updateObjectFromLocalStorage(value);
+      if (newValues) {
         setValue({ ...value, ...newValues });
         return { ...value, ...newValues };
       }
@@ -90,17 +100,8 @@ const useLocalStorage = (
     };
 
     const readMultipleKeysFromLocalStorage = () => {
-      let newValues = {};
-      let hasSomethingChanged = false;
-      for (const [key] of Object.entries(value)) {
-        const oldValue = value[key];
-        const newValue = localStorage.getItem(key);
-        if (newValue !== oldValue) {
-          newValues = { ...newValues, [key]: localStorage.getItem(key) };
-          hasSomethingChanged = true;
-        }
-      }
-      if (hasSomethingChanged) {
+      const newValues = updateObjectFromLocalStorage(value);
+      if (newValues) {
         setValue({ ...value, ...newValues });
       }
     };
