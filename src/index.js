@@ -33,7 +33,7 @@ const updateObjectFromLocalStorage = (object) => {
   return newValues;
 };
 
-const useLocalStorage = (keys, { sync = false, syncFrequency = 1000 } = {}) => {
+const useLocalStorage = (keys, { syncFrequency = 0 } = {}) => {
   const isUsingMultipleKeys = !isString(keys);
   const initialValue = isUsingMultipleKeys ? clearObjectValues(keys) : null;
   const [value, setValue] = useState(initialValue);
@@ -109,20 +109,20 @@ const useLocalStorage = (keys, { sync = false, syncFrequency = 1000 } = {}) => {
 
     let readLocalStorageIntervalId;
     readFromLocalStorage();
-    if (sync) {
+    if (syncFrequency > 0) {
       readLocalStorageIntervalId = setInterval(
         readFromLocalStorage,
         syncFrequency
       );
     }
     return () => {
-      if (sync) {
+      if (syncFrequency > 0) {
         clearInterval(readLocalStorageIntervalId);
       }
     };
-  }, [keys, value, isUsingMultipleKeys, sync, syncFrequency]);
+  }, [keys, value, isUsingMultipleKeys, syncFrequency]);
 
-  if (sync) {
+  if (syncFrequency > 0) {
     return [readFromLocalStorage, writeToLocalStorage];
   }
 
