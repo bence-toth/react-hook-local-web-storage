@@ -1,6 +1,6 @@
 {
   "name": "react-hook-local-web-storage",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A React hook for accessing localStorage",
   "keywords": [
     "react",
@@ -28,6 +28,6 @@
     "react": "^16.9.0"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || ^17"
+    "react": "^16.8.0 || ^17 || ^18"
   }
 }
