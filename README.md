@@ -209,4 +209,4 @@ Contributions are welcome. File bug reports, create pull requests, feel free to 
 
 ## License
 
-`react-hook-local-web-storage` is licensed under [LGPL](./LICENSE).
+`react-hook-local-web-storage` is licensed under [MIT](./LICENSE). Do what you will.
